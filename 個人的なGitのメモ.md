@@ -14,7 +14,7 @@
 <br>
 
 ### 【例２】 ~/.ssh/config に GitHubの接続情報を記述している場合
-SSH秘密鍵の名前が、デフォルトのid_rsaなどではない場合に、~/.ssh/configを利用する。
+GitHubへの接続に使用するSSH秘密鍵の名前が、デフォルトのid_rsaなどではない場合に、~/.ssh/configを利用する。
 
 `git clone github:nico82d4/study.git`
 
