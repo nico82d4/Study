@@ -8,8 +8,10 @@ import hashlib
 
 
 # 出力用の文字列
-msg = 'name : {0}, datetime : {1}, hash : {2}'
+msg = 'name : {0}, datetime : {1}, hash : {2}, hash(full) {3}'
 
+# カレントディレクトリを起点にする。
+# （VSCodeの実行パスが違うと正しく動作しないので注意。）
 path = pathlib.Path('.')
 
 for file in path.iterdir():
@@ -26,13 +28,11 @@ for file in path.iterdir():
             
         with open(file, 'rb') as f:
             while True:
-
                 # 巨大なファイルに対応するように
                 # 一定サイズに分割してハッシュ値を生成
                 binaryData = f.read(2048 * h.block_size)
                 if len(binaryData) == 0:
                     break
-                    
                 h.update(binaryData)
 
         # 生成したハッシュ値を16進数に変換
@@ -42,5 +42,5 @@ for file in path.iterdir():
         digestFirst = str(digest)[:8]
 
         # デバッグ用にファイル情報取得結果を出力
-        print(msg.format(name, lastupdate, digestFirst))
+        print(msg.format(name, lastupdate, digestFirst, digest))
 
