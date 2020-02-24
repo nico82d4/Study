@@ -1,6 +1,7 @@
 import pathlib
 import hashlib
 import datetime
+import re
 
 
 
@@ -32,15 +33,39 @@ def create_hash(path):
 
 def show_recursive(path):
     for po in path.iterdir():
+
+        # ディレクトリの場合、関数を再帰的に呼び出す。
         if po.is_dir():
             show_recursive(po)
+
+        # ファイルの場合
         elif po.is_file():
-            name = po.name
-            ts1 = po.stat().st_mtime
-            ts2 = datetime.datetime.fromtimestamp(ts1)
-            timestamp = ts2.strftime('%Y-%m-%d-%H%M%S')
-            digest = create_hash(po)
-            print(name, timestamp, digest)
+            # ファイル名の取得
+            name_old = po.name
+
+            # 拡張子の取得
+            suffix = po.suffix
+
+            # 処理を行う拡張子を正規表現でチェック
+            # （今回はマジックナンバーではなく、拡張子で。）
+            result = re.match(r'\.(?:py|txt|md)', suffix)
+
+            # 対象の拡張子である場合
+            if result is not None:
+
+                # 最終更新日付の取得と表示形式の変更
+                ts1 = po.stat().st_mtime
+                ts2 = datetime.datetime.fromtimestamp(ts1)
+                timestamp = ts2.strftime('%Y-%m-%d-%H%M%S')
+
+                # ファイルのハッシュ値を取得
+                digest = create_hash(po)
+
+                # 新しいファイル名の生成
+                name_new = ''.join([timestamp, '_', digest, suffix])
+
+                # デバッグ用に取得した情報を出力
+                print(name_old, '=>', name_new)
 
 
 
