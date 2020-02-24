@@ -1,3 +1,4 @@
+import sys
 import pathlib
 import hashlib
 import datetime
@@ -62,6 +63,7 @@ def show_recursive(path):
                 digest = create_hash(po)
 
                 # 新しいファイル名の生成
+                # （joinメソッドの区切りなしで生成。）
                 name_new = ''.join([timestamp, '_', digest, suffix])
 
                 # デバッグ用に取得した情報を出力
@@ -69,5 +71,18 @@ def show_recursive(path):
 
 
 
-path = pathlib.Path('.')
-show_recursive(path)
+
+# コマンドライン引数が1つだけの場合は、カレントパスを対象とする。
+if len(sys.argv) == 1:
+    path = pathlib.Path('.')
+    show_recursive(path)
+
+# コマンドライン引数が2つの場合は、引数のパスを対象とする。
+elif len(sys.argv) == 2:
+    path = pathlib.Path(sys.argv[1])
+    show_recursive(path)
+
+# コマンドライン引数が1と2以外の場合は、メッセージだけ出力する。
+else:
+    print(sys.argv[0], '[path]')
+
